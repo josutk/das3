@@ -5,6 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.applet.Applet;
 
+/* o Cliente acessa remotamente os serviços providos pelo servidor*/
 public class Client  {
 
 		public int id;
@@ -24,7 +25,11 @@ public class Client  {
             Message message = null;
 
             try {
+            	/* o registry permite localizar o servidor, por meio do endereço e porta onde ele é provido */
                 Registry registry = LocateRegistry.getRegistry("192.168.1.36", 6867);
+                /* utilizando a interface message e o registry, o stub para o servidor é criado e armazenado na variável message
+                 * que agora consegue fazer chamadas dos métodos remotos, que não serão executados no cliente, mas sim
+                 * por comunicação com o skeleton do servidor*/
                 message = (Message) registry.lookup("server");
                 System.out.println("conectou");
             } catch (Exception e) {
@@ -32,6 +37,7 @@ public class Client  {
             }
             if (message != null) {
                 try {
+                	/*chamada remota de método */
                     message.sendMessage(text);
                     System.out.println(message.getMessage(text));
                 } catch (RemoteException e) {
